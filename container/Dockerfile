@@ -21,7 +21,7 @@ RUN cd /bro-2.5/aux/plugins && \
         
         
 RUN yum upgrade
-RUN     yum -y install --enablerepo=C7.3.1611-base "kernel-devel-uname-r == $(uname -r)" && \
+RUN     yum -y install --enablerepo=C7.3.1611-base "kernel-devel-uname-r == 3.10.0-862.2.3.el7.x86_64" && \
         git clone https://github.com/J-Gras/bro-af_packet-plugin.git && \
         cd bro-af_packet-plugin && \
         ./configure --bro-dist=/bro-2.5 && \
