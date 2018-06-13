@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-{{ template "bro.fullname" . }}-pipeline
+data:
+  bro.conf: |
+    input {
+      redis {
+        host => "localhost"
+        key => "bro"
+        data_type => "list"
+        codec => json
+        batch_count => {{  .Values.logstashConfig.batchCount }}
+        threads => {{  .Values.logstashConfig.threads }}
+      }
+    }
+
+    filter {
+      json {
+        source => "message"
+      }
+      geoip {
+      source => "id.resp_h"
+      target => "resp_geoip"
+      add_field => [ "resp_location", "%{[resp_geoip][longitude]}" ]
+      add_field => [ "resp_location", "%{[resp_geoip][latitude]}"  ]
+      }
+      mutate {
+        convert => [ "resp_location", "float" ]
+        replace => { "type" => "bro" }
+        rename => { "id" => "bro_id" }
+        #need to rename the following because Elastic assumes they are objects and fails
+        rename => { "id.resp_p" => "bro_id_resp_p" }
+        rename => { "id.resp_h" => "bro_id_resp_h" }
+        rename => { "id.orig_p" => "bro_id_orig_p" }
+        rename => { "id.orig_h" => "bro_id_orig_h" }
+      }
+    } 
+ 
+    output {
+      elasticsearch {
+        hosts => "data-service:9200"
+        manage_template => false
+        index => "bro-%{+YYYY.MM.dd}"
+        document_type => "event"
+        codec => json
+        #user => logstash_internal
+        #password => changeme
+      }
+    }

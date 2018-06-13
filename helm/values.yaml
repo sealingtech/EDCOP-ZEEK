@@ -1,0 +1,49 @@
+# EDCOP Bro Chart values
+images:
+  bro: gcr.io/edcop-public/bro:2
+  logstash: docker.elastic.co/logstash/logstash:6.2.4
+  redis: redis:4.0.9
+  filebeat: docker.elastic.co/beats/filebeat:6.2.4
+networks:
+  # Overlay is the name of the default cni network
+  overlay: calico
+  # Passive is the name of the sriov interface
+  passive: passive 
+nodeSelector:
+  label: sensor
+broConfig:
+  # Requests are set to accommodate limited resource VMs
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 8
+    memory: 16G
+  # CPU pinning depends on your NUMA node configuration. 
+  # Separate cores by commas in ascending order without spaces.
+  #Select whether you want to pin CPUs or not.  If you choose to false, then the pinCpus and lbProcs will be ignored
+  setCpuAffinity: false
+  pinCpus: 0
+  #Set this to the number of cores you entered in pinCPUs, otherwise it will be ignored
+  lbProcs: 0
+logstashConfig:
+  threads: 2 
+  batchCount: 250
+  initialJvmHeap: 4g
+  maxJvmHeap: 4g 
+  pipelineWorkers: 2
+  pipelineOutputWorkers: 2 
+  pipelineBatchSize: 150  
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 2
+    memory: 8G
+redisConfig:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 2
+    memory: 8G
