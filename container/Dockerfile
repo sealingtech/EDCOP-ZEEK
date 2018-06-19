@@ -32,7 +32,7 @@ ADD startbro.sh /startbro.sh
 ADD reset-network.sh /reset-network.sh
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod +x /startbro.sh
-RUN chmod +x /reset-network.sh
+RUN chmod +x /reset-network.sh 
 RUN /usr/local/bro/bin/broctl deploy
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/local/bro/bin/bro
 WORKDIR /usr/local/bro/logs/
