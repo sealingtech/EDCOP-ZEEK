@@ -1,4 +1,12 @@
+
 #!/usr/bin/groovy
+
+// load pipeline functions
+// Requires pipeline-github-lib plugin to load library from github
+
+@Library('github.com/lachie83/jenkins-pipeline@dev')
+def pipeline = new io.estrado.Pipeline()
+
 
 node {
   def app
@@ -6,7 +14,8 @@ node {
 
 
   def pwd = pwd()
-  def tool_name="bro"
+  def chart_dir = "$pwd/helm/"
+  def tool_name = "bro"
   def container_dir = "$pwd/container/"
   def custom_image = "images.bro"
   def custom_values_url = "http://repos.sealingtech.com/cisco-c240-m5/bro/values.yaml"
@@ -24,7 +33,6 @@ node {
       /* Let's make sure we have the repository cloned to our workspace */
       checkout scm
   }
-
 
   stage('Build image') {
       /* This builds the actual image; synonymous to
@@ -49,7 +57,45 @@ node {
       sh "helm lint $tool_name"
   }
 
-  stage('helm deploy') {
+  stage('helm deploy bro') {
       sh "helm install --set $custom_image='$container_tag:$env.BUILD_ID' --name='$user_id-$tool_name-$env.BUILD_ID' -f $custom_values_url $tool_name"
   }
+
+  stage('sleeping 2 minutes') {
+    sleep(120)
+  }
+
+  stage('Verifying running pods') {
+    def number_ready=sh(returnStdout: true, script: "kubectl get ds $user_id-$tool_name-$env.BUILD_ID-$tool_name  -o jsonpath={.status.numberReady}").trim()
+    def number_scheduled=sh(returnStdout: true, script: "kubectl get ds $user_id-$tool_name-$env.BUILD_ID-$tool_name  -o jsonpath={.status.currentNumberScheduled}").trim()
+
+    println("Ready pods: $number_ready  Scheduled pods: $number_scheduled")
+
+    if(number_ready==number_scheduled) {
+      println("Pods are running")
+    } else {
+      println("Some or all Pods failed")
+      error("Some or all Pods failed")
+    }
+  }
+
+
+
+
+  stage('Verifying engine started on first pod') {
+    def command="kubectl get pods  | grep $user_id-$tool_name-$env.BUILD_ID-$tool_name | awk "+'{\'print $1\'}'+"| head -1"
+    def first_pod=sh(returnStdout: true, script: command)
+
+    def command2="kubectl logs -c bro $first_pod | grep started"
+    println(command2)
+
+    sh(command)
+  }
+
+  stage('running traffic') {
+      sshagent(credentials: ['jenkins']) {
+        sh "ssh -o StrictHostKeyChecking=no -l jenkins 172.16.250.30 'cd /trex; sudo /trex/t-rex-64  -f /trex/cap2/cnn_dns.yaml -d 60'"
+      }
+  }
+
 }
