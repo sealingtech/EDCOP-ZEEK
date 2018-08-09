@@ -56,7 +56,7 @@ node {
   }
 
   stage('helm deploy bro') {
-      sh "helm install --set $custom_image='$container_tag:$env.BUILD_ID' --name='$user_id-$tool_name-$env.BUILD_ID'"
+      sh "helm install --set $custom_image='$container_tag:$env.BUILD_ID' --name='$user_id-$tool_name-$env.BUILD_ID' $tool_name"
   }
 
   stage('sleeping 2 minutes') {
