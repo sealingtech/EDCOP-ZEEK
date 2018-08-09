@@ -18,7 +18,7 @@ broConfig:
     memory: 64Mi
   limits:
     cpu: 2
-    memory: 2G
+    memory: 4G
   # CPU pinning depends on your NUMA node configuration. 
   # Separate cores by commas in ascending order without spaces.
   #Select whether you want to pin CPUs or not.  If you choose to false, then the pinCpus and lbProcs will be ignored
