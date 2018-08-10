@@ -1,4 +1,3 @@
-
 #!/usr/bin/groovy
 
 // load pipeline functions
