@@ -526,7 +526,7 @@ data:
             "fieldFormatMap": "{\"flow.bytes_toclient\":{\"id\":\"bytes\"},\"flow.bytes_toserver\":{\"id\":\"bytes\"},\"stats.decoder.bytes\":{\"id\":\"bytes\"}}"          }
         },
         {
-          "id": "bro*",
+          "id": "bro",
           "type": "index-pattern",
           "updated_at": "2018-06-14T18:32:21.541Z",
           "version": 5,
@@ -538,7 +538,7 @@ data:
           }
         },
         {
-          "id": "suricata*",
+          "id": "suricata",
           "type": "index-pattern",
           "updated_at": "2018-06-14T18:32:21.541Z",
           "version": 5,
