@@ -384,6 +384,48 @@ data:
           }
         },
         {
+          "id": "a681eb10-6d7a-11e8-b2e6-cbeed9253e31",
+          "type": "visualization",
+          "attributes": {
+            "title": "SSL - Server Name",
+            "visState": "{\"title\":\"SSL - Server Name\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMeticsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"tls.sni.keyword\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Server Name\"}}]}",
+            "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+            "description": "",
+            "version": 1,
+            "kibanaSavedObjectMeta": {
+              "searchSourceJSON": "{\"index\":\"suricata\",\"filter\":[{\"meta\":{\"index\":\"e3b2c600-6a67-11e8-b2e6-cbeed9253e31\",\"negate\":false,\"disabled\":false,\"alias\":null,\"type\":\"phrase\",\"key\":\"event_type\",\"value\":\"tls\",\"params\":{\"query\":\"tls\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"event_type\":{\"query\":\"tls\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}],\"query\":{\"query\":\"\",\"language\":\"lucene\"}}"
+            }
+          }
+        },
+        {
+          "id": "93c49700-68f9-11e8-b2e6-cbeed9253e31",
+          "type": "visualization",
+          "attributes": {
+            "title": "SSL version",
+            "visState": "{\"title\":\"SSL version\",\"type\":\"pie\",\"params\":{\"type\":\"pie\",\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"bottom\",\"isDonut\":true,\"labels\":{\"show\":true,\"values\":true,\"last_level\":true,\"truncate\":100}},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"version.keyword\",\"size\":6,\"order\":\"desc\",\"orderBy\":\"_term\"}}]}",
+            "uiStateJSON": "{\n  \"spy\": {\n    \"mode\": {\n      \"name\": \"table\",\n      \"fill\": false\n    }\n  }\n}",
+            "description": "",
+            "version": 1,
+            "kibanaSavedObjectMeta": {
+              "searchSourceJSON": "{\"index\":\"bro\",\"filter\":[],\"query\":{\"query\":\"\",\"language\":\"lucene\"}}"
+            }
+          }
+        },
+        {
+          "id": "64807250-6d79-11e8-b2e6-cbeed9253e31",
+          "type": "visualization",
+          "attributes": {
+            "title": "Issuer",
+            "visState": "{\"title\":\"Issuer\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMeticsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"tls.issuerdn.keyword\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Issuer\"}}]}",
+            "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":1,\"direction\":\"desc\"}}}}",
+            "description": "",
+            "version": 1,
+            "kibanaSavedObjectMeta": {
+              "searchSourceJSON": "{\"index\":\"suricata\",\"filter\":[],\"query\":{\"query\":\"\",\"language\":\"lucene\"}}"
+            }
+          }
+        },
+        {
           "id": "bb785a10-6d78-11e8-b2e6-cbeed9253e31",
           "type": "visualization",
           "attributes": {
@@ -398,46 +440,6 @@ data:
           }
         },
         {
-          "id": "a681eb10-6d7a-11e8-b2e6-cbeed9253e31",
-          "type": "visualization",
-          "attributes": {
-            "title": "SSL - Server Name",
-            "visState": "{\"title\":\"SSL - Server Name\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMeticsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"tls.sni.keyword\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Server Name\"}}]}",
-            "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
-            "description": "",
-            "version": 1,
-            "kibanaSavedObjectMeta": {
-              "searchSourceJSON": "{\"index\":\"suricata\",\"filter\":[{\"meta\":{\"index\":\"e3b2c600-6a67-11e8-b2e6-cbeed9253e31\",\"negate\":false,\"disabled\":false,\"alias\":null,\"type\":\"phrase\",\"key\":\"event_type\",\"value\":\"tls\",\"params\":{\"query\":\"tls\",\"type\":\"phrase\"}},\"query\":{\"match\":{\"event_type\":{\"query\":\"tls\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}}],\"query\":{\"query\":\"\",\"language\":\"lucene\"}}"
-            }
-          }
-        },
-          "id": "93c49700-68f9-11e8-b2e6-cbeed9253e31",
-          "type": "visualization",
-          "attributes": {
-            "title": "SSL version",
-            "visState": "{\"title\":\"SSL version\",\"type\":\"pie\",\"params\":{\"type\":\"pie\",\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"bottom\",\"isDonut\":true,\"labels\":{\"show\":true,\"values\":true,\"last_level\":true,\"truncate\":100}},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"version.keyword\",\"size\":6,\"order\":\"desc\",\"orderBy\":\"_term\"}}]}",
-            "uiStateJSON": "{\n  \"spy\": {\n    \"mode\": {\n      \"name\": \"table\",\n      \"fill\": false\n    }\n  }\n}",
-            "description": "",
-            "version": 1,
-            "kibanaSavedObjectMeta": {
-              "searchSourceJSON": "{\"index\":\"bro\",\"filter\":[],\"query\":{\"query\":\"\",\"language\":\"lucene\"}}"
-            }
-          }
-        },
-          "id": "64807250-6d79-11e8-b2e6-cbeed9253e31",
-          "type": "visualization",
-          "attributes": {
-            "title": "Issuer",
-            "visState": "{\"title\":\"Issuer\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMeticsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"count\",\"schema\":\"metric\",\"params\":{}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"tls.issuerdn.keyword\",\"size\":10,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Issuer\"}}]}",
-            "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":1,\"direction\":\"desc\"}}}}",
-            "description": "",
-            "version": 1,
-            "kibanaSavedObjectMeta": {
-              "searchSourceJSON": "{\"index\":\"suricata\",\"filter\":[],\"query\":{\"query\":\"\",\"language\":\"lucene\"}}"
-            }
-          }
-        },
-        },
           "id": "2f4467d0-6d7a-11e8-b2e6-cbeed9253e31",
           "type": "visualization",
           "attributes": {
