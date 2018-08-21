@@ -18,8 +18,8 @@ broConfig:
     cpu: 100m
     memory: 64Mi
   limits:
-    cpu: 8
-    memory: 16G
+    cpu: 2
+    memory: 4G
   # CPU pinning depends on your NUMA node configuration. 
   # Separate cores by commas in ascending order without spaces.
   #Select whether you want to pin CPUs or not.  If you choose to false, then the pinCpus and lbProcs will be ignored
@@ -30,8 +30,8 @@ broConfig:
 logstashConfig:
   threads: 2 
   batchCount: 250
-  initialJvmHeap: 4g
-  maxJvmHeap: 4g 
+  initialJvmHeap: 1g
+  maxJvmHeap: 1g 
   pipelineWorkers: 2
   pipelineOutputWorkers: 2 
   pipelineBatchSize: 150  
@@ -40,11 +40,11 @@ logstashConfig:
     memory: 64Mi
   limits:
     cpu: 2
-    memory: 8G
+    memory: 3G
 redisConfig:
   requests:
     cpu: 100m
     memory: 64Mi
   limits:
     cpu: 2
-    memory: 8G
+    memory: 1G
