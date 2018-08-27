@@ -1,10 +1,9 @@
 # EDCOP Bro Chart values
 images:
   bro: gcr.io/edcop-public/bro:2
-  logstash: docker.elastic.co/logstash/logstash:6.3.0
+  logstash: docker.elastic.co/logstash/logstash:6.4.0
   redis: redis:4.0.9
-  filebeat: docker.elastic.co/beats/filebeat:6.3.0
-  runner: gcr.io/edcop-public/runner:8
+  filebeat: docker.elastic.co/beats/filebeat:6.4.0
 networks:
   # Overlay is the name of the default cni network
   overlay: calico
