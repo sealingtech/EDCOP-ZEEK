@@ -33,6 +33,8 @@ ADD reset-network.sh /reset-network.sh
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chmod +x /startbro.sh
 RUN chmod +x /reset-network.sh
+#Used for allowing Bro to run as a regular user
+setcap cap_net_raw,cap_net_admin=eip /usr/local/bro/bin/bro
 RUN /usr/local/bro/bin/broctl deploy
 WORKDIR /usr/local/bro/logs/
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

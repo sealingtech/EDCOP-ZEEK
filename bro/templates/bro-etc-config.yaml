@@ -163,7 +163,7 @@ data:
     type=worker
     host=localhost
     interface=af_packet::net0
-    lb_method=custom{{ if .Values.broConfig.setCpuAffinity }}
+    {{ if .Values.broConfig.setCpuAffinity }}lb_method=custom
     lb_procs={{ .Values.broConfig.lbProcs }}
     pin_cpus={{ .Values.broConfig.pinCpus }}
     {{ end }}
