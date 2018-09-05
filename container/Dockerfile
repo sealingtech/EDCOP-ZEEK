@@ -30,7 +30,7 @@ RUN     yum -y install --enablerepo=C7.3.1611-base "kernel-devel-uname-r == $(un
 
 FROM centos:latest
 RUN yum -y install epel-release
-RUN yum -y install supervisor git wget libpcap GeoIP gperftools hiredis
+RUN yum -y install supervisor git wget libpcap GeoIP gperftools hiredis && yum clean all
 COPY --from=build /usr/local/bro/ /usr/local/bro
 ADD startbro.sh /startbro.sh
 ADD reset-network.sh /reset-network.sh
