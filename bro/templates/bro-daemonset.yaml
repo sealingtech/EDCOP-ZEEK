@@ -26,6 +26,9 @@ spec:
       - name: bro
         image: {{ .Values.images.bro }}
         imagePullPolicy: Always
+        env: 
+          - name: PACKAGES
+            values: ({{- range .Values.broConfig.packages }} {{ . | title }} {{- end }} )
         securityContext:
           capabilities:
             add:
