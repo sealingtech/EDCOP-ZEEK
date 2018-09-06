@@ -46,7 +46,7 @@ spec:
           name: bro-logs 
         - mountPath: /usr/local/bro/etc/
           name: bro-etc-config 
-        - mountPath: /usr/local/bro/share/bro/site/
+        - mountPath: /conf/site/
           name: bro-site-config 
         - mountPath: /usr/local/bro/spool/
           name: bro-spool
