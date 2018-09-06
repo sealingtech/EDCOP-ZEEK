@@ -30,7 +30,11 @@ RUN     yum -y install --enablerepo=C7.3.1611-base "kernel-devel-uname-r == $(un
 
 FROM centos:latest
 RUN yum -y install epel-release
-RUN yum -y install supervisor git wget libpcap GeoIP gperftools hiredis && yum clean all
+RUN yum -y install supervisor git wget libpcap GeoIP gperftools hiredis python-pip tcpdump && \
+    yum -y clean all && \
+    mkdir -p /conf/{plugins,site} && \
+    pip install bro-pkg && \
+    yum -y remove python-pip
 COPY --from=build /usr/local/bro/ /usr/local/bro
 ADD startbro.sh /startbro.sh
 ADD reset-network.sh /reset-network.sh
@@ -40,6 +44,7 @@ RUN chmod +x /startbro.sh
 RUN chmod +x /reset-network.sh
 #Used for allowing Bro to run as a regular user
 RUN /usr/local/bro/bin/broctl deploy
+#Needed to run as a non-privileged user
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/local/bro/bin/bro
 WORKDIR /usr/local/bro/logs/
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

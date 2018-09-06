@@ -8,8 +8,12 @@
 #CONTAINERINT is the interface within the Container
 CONTAINERINT="net0"
 
+#Need to copy our temporary mount site to allow Bro package manager to run
+cp -rpf /conf/site/* /usr/local/bro/share/bro/site/
+
+sudo chgrp $USER $(bro-config --site_dir) $(bro-config --plugin_dir)
+sudo chmod g+rwX $(bro-config --site_dir) $(bro-config --plugin_dir)
+
 sed -i "/const fanout_id/c\ \tconst fanout_id = $RANDOM &redef;" /usr/local/bro/lib/bro/plugins/Bro_AF_Packet/scripts/init.bro
-#########Removing this to allow Kubernetes to configure this##############
-#Pins cpus 0 - 5 by default, should be changed depending on your NUMA node setup 
-#sh -c "printf '[logger] \ntype=logger \nhost=localhost \n# \n[manager] \ntype=manager \nhost=localhost \n# \n[proxy-1] \ntype=proxy \nhost=localhost \n# \n[worker-1] \ntype=worker \nhost=localhost \ninterface=af_packet::$CONTAINERINT \nlb_method=custom \nlb_procs=6 \npin_cpus=0,1,2,3,4,5' > /usr/local/bro/etc/node.cfg"
+
 /usr/local/bro/bin/bro -i $CONTAINERINT -e 'redef LogAscii::use_json=T;'
