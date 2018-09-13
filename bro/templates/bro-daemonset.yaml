@@ -28,7 +28,7 @@ spec:
         imagePullPolicy: Always
         env: 
           - name: PACKAGES
-            values: ({{- range .Values.broConfig.packages }} {{ . | title }} {{- end }} )
+            value: "{{- range .Values.broConfig.packages }}{{ . | title }},{{- end }}"
         securityContext:
           capabilities:
             add:
