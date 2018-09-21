@@ -28,14 +28,15 @@ RUN     yum -y install --enablerepo=C7.3.1611-base "kernel-devel-uname-r == $(un
         make install && \
         yum -y clean all
 
+#here is where you can add all your packages.  Note that some packages require different build tools and therefore may require additional packages not otherwise found
+RUN PATH="${PATH}:/usr/local/bro/bin/"; bro-pkg autoconfig && \
+    bro-pkg install --force bro/sethhall/unknown-mime-type-discovery 
+
 FROM centos:latest
 RUN yum -y install epel-release
-RUN yum -y install supervisor git wget libpcap GeoIP gperftools hiredis python-pip tcpdump cmake && \
+RUN yum -y install supervisor git wget libpcap GeoIP gperftools hiredis tcpdump cmake && \
     yum -y clean all && \
-    mkdir -p /conf/{plugins,site} && \
-    pip install bro-pkg && \
-    yum -y remove python-pip
-RUN mkdir /bro-2.5 && wget https://www.bro.org/downloads/bro-2.5.5.tar.gz -O /bro-2.5
+    mkdir -p /conf/{plugins,site} 
 COPY --from=build /usr/local/bro/ /usr/local/bro
 ADD startbro.sh /startbro.sh
 ADD reset-network.sh /reset-network.sh
