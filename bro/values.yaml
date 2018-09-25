@@ -26,9 +26,6 @@ broConfig:
   pinCpus: 0
   #Set this to the number of cores you entered in pinCPUs, otherwise it will be ignored
   lbProcs: 0
-  packages:
-  - bro/scebro/ldap-analyzer
-  - bro/ncsa/bro-is-darknet
 logstashConfig:
   threads: 2 
   batchCount: 250

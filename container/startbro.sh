@@ -8,9 +8,6 @@
 #CONTAINERINT is the interface within the Container
 CONTAINERINT="net0"
 
-#Need to copy our temporary mount site to allow Bro package manager to run
-cp -rpf /conf/site/* /usr/local/bro/share/bro/site/
-
 sudo chgrp $USER $(bro-config --site_dir) $(bro-config --plugin_dir)
 sudo chmod g+rwX $(bro-config --site_dir) $(bro-config --plugin_dir)
 
