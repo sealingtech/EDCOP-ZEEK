@@ -3,14 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{ template "bro.fullname" . }}-site-config
 data:
-  local-logger.bro: |
-    ##! Local site policy loaded only by the logger if Bro is running as a cluster.
-  local-manager.bro: |
-    ##! Local site policy loaded only by the manager if Bro is running as a cluster.
-  local-proxy.bro: |
-    ##! Local site policy loaded only by the proxies if Bro is running as a cluster.
-  local-worker.bro: '##! Local site policy loaded only by the workers if Bro is running
-    as a cluster.'
   local.bro: |
     ##! Local site policy. Customize as appropriate.
     ##!
