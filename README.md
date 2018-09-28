@@ -139,3 +139,68 @@ redisConfig:
     cpu: 2
     memory: 8G
 ```
+
+
+
+# Installing Bro Packages
+Bro has the ability to add various packages to increase functionality of the tool.  It is possible to add packages to the official EDCOP images by simply extending the images and creating your own.  To do this it will be necessary to have access to your own container repository (Docker Hub, or internally host repository will bot work).  Bro uses a [multi-stage container](https://docs.docker.com/develop/develop-images/multistage-build/).  What this means is that when the container is built, there is actually two containers that are created.  The first container downloads all the necessary development tools, builds Bro and then installs Bro packages using the Bro package manager.  When these tasks are completed, a new container is created that then copies the output of the the Bro directory over to the new container.  The purpose of this process is to ensure the final container is kept as lightweight as possible by keeping the development packages and build tools out.
+
+The build container in the Dockerfile begins with 
+
+```
+FROM centos:latest AS build
+```
+
+The final container 
+
+```
+FROM centos:latest
+```
+
+To download the containers for modifying run the command:
+```
+git clone https://github.com/sealingtech/EDCOP-BRO
+```
+
+## Adding packages
+All packages are different as far as what is required to make them work, some require specific packages, others require configuration changes to be made.  First step is to figure out which packages are needed by a specific.  Generally, if you need additional packages in the build container it will be necessary to add the development package (doesn't hurt to add the library packages as well).  The final container will only need the libraries.
+
+For example, for the Redis package ensure in the build container on the yum install line you include hiredis-devel and hiredis.
+
+```
+yum -y install ...... hiredis-devel hiredis
+```
+
+In the final container install only the library package
+
+```
+yum -y install ...... hiredis
+```
+
+To build the container from the EDCOP-BRO/container directory run the command:
+docker build -t <name of image> .
+
+If there are errors when building packages, there will be a section on the build process that will output the messages from the build logs of each plugin.  Look for the following lines in the output:
+
+```
+Step 7/22 : RUN echo "********Log files for Bro Packages*********" &&     for i in $(find /root/.bro-pkg/logs/); do echo "***Bro Log file: $i"; cat $i; done;
+ ---> Running in d8be4c589ba9
+********Log files for Bro Packages*********
+***Bro Log file: /root/.bro-pkg/logs/
+```
+
+Push this container to your Docker repository following the instructions of the repository provider.  When deploying the tool, simply update the images.bro option to point to your Docker repository.
+
+# Configuring individual plugins
+The configuration process will be different for each plugin and therefore difficult to prescribe a single method (some don't require any configuration).  Configuration files are often configured when the containers are created through configuration maps in Kubernetes.  If the package you are installing requires either of these it will be necessary to apply these configurations through a configuration map. To configure these, it will be necessary to modify the following files. 
+
+Directory mounted: /usr/local/bro/etc/
+Configmap: bro/templates/bro-etc-config.yaml
+
+Directory mounted: /usr/local/bro/share/bro/site/
+Configmap: bro/templates/bro-site-config.yaml
+
+Modify these files with the necessary configurations changes in their corresponding files.  If there is an additional directories needed, it is possible to add a seperate configuration map, and then mount it accordingly in the bro-daemonset.yaml.  It will be necessary to create your own Helm repository to host the new file.
+
+
+
