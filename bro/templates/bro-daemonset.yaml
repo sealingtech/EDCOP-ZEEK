@@ -35,8 +35,11 @@ spec:
               - NET_ADMIN 
               - SYS_NICE #Used for CPU pinning
               - NET_RAW
-          runAsUser: 2001
-          fsGroup: 2001
+          #runAsUser: 2001
+          #fsGroup: 2001
+        env:
+          - name: "BRO_PACKAGES"
+            value: ({{- range .Values.broConfig.packages }} {{ . | title | quote }}{{- end }})
         resources:
           requests:
             cpu: "{{ .Values.broConfig.requests.cpu }}"

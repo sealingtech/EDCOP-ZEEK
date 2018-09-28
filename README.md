@@ -26,9 +26,9 @@ By default, images are pulled from *edcop-master:5000* which is presumed to be h
 ```
 images:
   bro: gcr.io/edcop-public/bro:2
-  logstash: docker.elastic.co/logstash/logstash:6.2.4
+  logstash: docker.elastic.co/logstash/logstash:6.3.0
   redis: redis:4.0.9
-  filebeat: docker.elastic.co/beats/filebeat:6.2.4
+  filebeat: docker.elastic.co/beats/filebeat:6.3.0
 ```
  
 ## Networks
@@ -69,20 +69,20 @@ volumes:
 	  
 ## Node Selector
 
-This value tells Kubernetes which hosts the daemonset should be deployed to by using labels given to the hosts. Hosts without the defined label will not receive pods. 
+This value tells Kubernetes which hosts the daemonset should be deployed to by using labels given to the hosts. Hosts without the defined label will not receive pods. Bro will only deploy to nodes that are labeled 'sensor=true'
  
 ```
 nodeSelector:
-  nodetype: worker
+  label: sensor
 ```
  
 To find out what labels your hosts have, please use the following:
 ```
 # kubectl get nodes --show-labels
 NAME		STATUS		ROLES		AGE		VERSION		LABELS
-master 		Ready		master		1d		v1.9.1		...,nodetype=master
-minion-1	Ready		<none>		1d		v1.9.1		...,nodetype=minion
-minion-2	Ready		<none>		1d		v1.9.1		...,nodetype=minion
+master 		Ready		master		1d		v1.9.1		...,infrastructure=true
+minion-1	Ready		<none>		1d		v1.9.1		...,sensor=true
+minion-2	Ready		<none>		1d		v1.9.1		...,sensor=true
 ```
 
 ## Bro Configuration
