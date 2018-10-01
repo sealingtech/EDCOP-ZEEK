@@ -1,6 +1,6 @@
 # EDCOP Bro Chart values
 images:
-  bro: gcr.io/edcop-public/dlohin-bro:0.8.9
+  bro: gcr.io/edcop-dev/dlohin-bro:23
   logstash: docker.elastic.co/logstash/logstash:6.4.0
   redis: redis:4.0.9
   filebeat: docker.elastic.co/beats/filebeat:6.4.0
