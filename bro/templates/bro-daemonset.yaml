@@ -26,7 +26,8 @@ spec:
         {{ end }}
       ]'
     spec:
-      {{ if .Values.networks.useHostNetworking }}hostNetwork: true{{ end }}
+      {{ if .Values.networks.useHostNetworking }}hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet{{ end }}
       containers:
       - name: bro
         image: {{ .Values.images.bro }}
