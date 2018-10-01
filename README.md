@@ -131,8 +131,6 @@ redisConfig:
     memory: 8G
 ```
 
- 
-
 # Installing Bro Packages
 Bro has the ability to add various packages to increase functionality of the tool.  It is possible to add packages to the official EDCOP images by simply extending the images and creating your own.  To do this it will be necessary to have access to your own container repository (Docker Hub, or internally host repository will bot work).  Bro uses a [multi-stage container](https://docs.docker.com/develop/develop-images/multistage-build/).  What this means is that when the container is built, there is actually two containers that are created.  The first container downloads all the necessary development tools, builds Bro and then installs Bro packages using the Bro package manager.  When these tasks are completed, a new container is created that then copies the output of the the Bro directory over to the new container.  The purpose of this process is to ensure the final container is kept as lightweight as possible by keeping the development packages and build tools out.
 
@@ -191,7 +189,8 @@ Configmap: bro/templates/bro-etc-config.yaml
 Directory mounted: /usr/local/bro/share/bro/site/
 Configmap: bro/templates/bro-site-config.yaml
 
-Modify these files with the necessary configurations changes in their corresponding files.  If there is an additional directories needed, it is possible to add a separate configuration map, and then mount it accordingly in the bro-daemonset.yaml.  It will be necessary to create your own Helm repository to host the new file.
+Modify these files with the necessary configurations changes in their corresponding files.  If there is an additional directories needed, it is possible to add a seperate configuration map, and then mount it accordingly in the bro-daemonset.yaml.  It will be necessary to create your own Helm repository to host the new file.
+
 
 
 
