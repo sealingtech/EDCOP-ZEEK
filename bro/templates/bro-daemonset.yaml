@@ -18,35 +18,57 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         networks: '[
+        {{ if .Values.networks.useHostNetworking }}
+        { "name": "{{ .Values.networks.overlay }}" }
+        {{ else }}
         { "name": "{{ .Values.networks.overlay }}" },
         { "name": "{{ .Values.networks.passive }}" }
+        {{ end }}
       ]'
     spec:
+      {{- if .Values.networks.useHostNetworking }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet{{ end }}
       initContainers:
       - name: verifynode
         image: {{ .Values.images.runner }}
         env:
+        {{ if .Values.networks.useHostNetworking }}
+        - name: INTERFACE
+          value: "{{ .Values.networks.hostNetworkingInterface }}"
+        {{ else }}
+        - name: INTERFACE
+          value: "net0"
+        {{ end }}
         - name: STARTUP_SCRIPT
           value: |
             #!/bin/bash
             set -e
             sleep 10
-            if [ ! -f /sys/class/net/net0/operstate ]; then
-            echo "Network interface 'net0' not found, exiting..."
+            if [ ! -f /sys/class/net/$INTERFACE/operstate ]; then
+            echo "Network interface '$INTERFACE' not found, exiting..."
             exit 1
             fi
       containers:
       - name: bro
         image: {{ .Values.images.bro }}
         imagePullPolicy: Always
+        env: 
+          {{ if .Values.networks.useHostNetworking }}
+          - name: INTERFACE
+            value: "{{ .Values.networks.hostNetworkingInterface }}"
+          {{ else }}
+          - name: INTERFACE
+            value: "net0"
+          {{ end }}
         securityContext:
           capabilities:
             add:
               - NET_ADMIN 
               - SYS_NICE #Used for CPU pinning
               - NET_RAW
-          #runAsUser: 2001
-          #fsGroup: 2001
+          runAsUser: 2001
+          fsGroup: 2001
         resources:
           requests:
             cpu: "{{ .Values.broConfig.requests.cpu }}"
@@ -59,8 +81,9 @@ spec:
           name: bro-logs 
         - mountPath: /usr/local/bro/etc/
           name: bro-etc-config 
-        - mountPath: /usr/local/bro/share/bro/site/
+        - mountPath: /usr/local/bro/share/bro/site/local.bro
           name: bro-site-config 
+          subPath: local.bro
         - mountPath: /usr/local/bro/spool/
           name: bro-spool
       
@@ -133,6 +156,5 @@ spec:
           name: logstash-{{ template "bro.fullname" . }}-pipeline
           
       restartPolicy: Always
-      dnsPolicy: ClusterFirst
       nodeSelector:
         {{ .Values.nodeSelector.label }} : "true"

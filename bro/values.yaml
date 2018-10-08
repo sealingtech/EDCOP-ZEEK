@@ -1,6 +1,6 @@
 # EDCOP Bro Chart values
 images:
-  bro: gcr.io/edcop-public/bro:2
+  bro: gcr.io/edcop-dev/dlohin-bro:23
   logstash: docker.elastic.co/logstash/logstash:6.4.0
   redis: redis:4.0.9
   filebeat: docker.elastic.co/beats/filebeat:6.4.0
@@ -9,6 +9,8 @@ networks:
   overlay: calico
   # Passive is the name of the sriov interface
   passive: passive 
+  useHostNetworking: false  #If this option is set to true, the container will see all physical interfaces on the physical host it resides.  This has some security issues but can be useful in some situations. 
+  hostNetworkingInterface: eth0  #Only used with useHostNetworking is set to true.  Set this to the interface name of the adapter to listen on.
 nodeSelector:
   label: sensor
 broConfig:
@@ -26,6 +28,8 @@ broConfig:
   pinCpus: 0
   #Set this to the number of cores you entered in pinCPUs, otherwise it will be ignored
   lbProcs: 0
+  #List out all the packages you would like to install from here https://github.com/bro/packages.  These packages will be installed before each instance of Bro is deployed
+  #NOTE: Currently requires access to the Internet
 logstashConfig:
   threads: 2 
   batchCount: 250
