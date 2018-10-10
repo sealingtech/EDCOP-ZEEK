@@ -120,8 +120,6 @@ spec:
       - name: filebeat
         image: {{ .Values.images.filebeat }}
         imagePullPolicy: Always
-        securityContext:
-          privileged: true
         volumeMounts:
         - mountPath: /bro/
           name: bro-spool
