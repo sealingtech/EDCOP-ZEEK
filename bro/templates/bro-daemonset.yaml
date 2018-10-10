@@ -18,28 +18,27 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         networks: '[
-        {{ if .Values.networks.useHostNetworking }}
+        {{- if .Values.networks.useHostNetworking }}
         { "name": "{{ .Values.networks.overlay }}" }
-        {{ else }}
+        {{- else }}
         { "name": "{{ .Values.networks.overlay }}" },
         { "name": "{{ .Values.networks.passive }}" }
-        {{ end }}
+        {{- end }}
       ]'
     spec:
       {{- if .Values.networks.useHostNetworking }}
       hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet{{ end }}
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
       initContainers:
       - name: verifynode
         image: {{ .Values.images.runner }}
         env:
-        {{ if .Values.networks.useHostNetworking }}
         - name: INTERFACE
-          value: "{{ .Values.networks.hostNetworkingInterface }}"
-        {{ else }}
-        - name: INTERFACE
-          value: "net0"
-        {{ end }}
+          valueFrom:
+            secretKeyRef:
+              name: passive-interface
+              key: interface
         - name: STARTUP_SCRIPT
           value: |
             #!/bin/bash
@@ -53,22 +52,20 @@ spec:
       - name: bro
         image: {{ .Values.images.bro }}
         imagePullPolicy: Always
-        env: 
-          {{ if .Values.networks.useHostNetworking }}
-          - name: INTERFACE
-            value: "{{ .Values.networks.hostNetworkingInterface }}"
-          {{ else }}
-          - name: INTERFACE
-            value: "net0"
-          {{ end }}
         securityContext:
+          runAsUser: 2001
+          fsGroup: 2001
           capabilities:
             add:
               - NET_ADMIN 
               - SYS_NICE #Used for CPU pinning
               - NET_RAW
-          runAsUser: 2001
-          fsGroup: 2001
+        env: 
+        - name: INTERFACE
+          valueFrom:
+            secretKeyRef:
+              name: passive-interface
+              key: interface
         resources:
           requests:
             cpu: "{{ .Values.broConfig.requests.cpu }}"
