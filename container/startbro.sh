@@ -6,7 +6,7 @@
 #Edit these varibles as needed#
 ###############################
 #CONTAINERINT is the interface within the Container
-CONTAINERINT=$(INTERFACE)
+CONTAINERINT=$INTERFACE
 
 sudo chgrp $USER $(bro-config --site_dir) $(bro-config --plugin_dir)
 sudo chmod g+rwX $(bro-config --site_dir) $(bro-config --plugin_dir)
