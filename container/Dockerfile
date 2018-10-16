@@ -38,5 +38,6 @@ RUN groupadd -g 2001 bro && \
     chown -R bro:bro /usr/local/bro/logs/ /usr/local/bro/lib/bro/plugins /usr/local/bro/share/bro/site
 #Needed to run as a non-privileged user
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/local/bro/bin/bro
+RUN setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
 WORKDIR /usr/local/bro/logs/
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]

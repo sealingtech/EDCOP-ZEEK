@@ -162,11 +162,7 @@ data:
     [worker-1]
     type=worker
     host=localhost
-    {{ if .Values.networks.useHostNetworking }}
-    interface=af_packet::{{ .Values.networks.hostNetworkingInterface }}
-    {{ else }}
-    interface=af_packet::net0
-    {{ end }}
+    interface=af_packet::${INTERFACE}
     {{ if .Values.broConfig.setCpuAffinity }}lb_method=custom
     lb_procs={{ .Values.broConfig.lbProcs }}
     pin_cpus={{ .Values.broConfig.pinCpus }}
