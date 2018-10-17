@@ -91,6 +91,9 @@ data:
     # changes, and a value of 0 means do not send mail.
     MailHostUpDown = 1
     
+    # Send Mail
+    SendMail = /usr/sbin/sendmail
+    
     ###############################################
     # Logging Options
     
@@ -162,8 +165,8 @@ data:
     [worker-1]
     type=worker
     host=localhost
-    interface=af_packet::net0
-    lb_method=custom{{ if .Values.broConfig.setCpuAffinity }}
+    interface=af_packet::${INTERFACE}
+    {{ if .Values.broConfig.setCpuAffinity }}lb_method=custom
     lb_procs={{ .Values.broConfig.lbProcs }}
     pin_cpus={{ .Values.broConfig.pinCpus }}
     {{ end }}
