@@ -91,6 +91,9 @@ data:
     # changes, and a value of 0 means do not send mail.
     MailHostUpDown = 1
     
+    # Send Mail
+    SendMail = /usr/sbin/sendmail
+    
     ###############################################
     # Logging Options
     

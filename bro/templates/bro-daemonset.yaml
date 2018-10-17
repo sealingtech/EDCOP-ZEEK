@@ -52,7 +52,7 @@ spec:
       - name: bro
         image: {{ .Values.images.bro }}
         imagePullPolicy: Always
-        command: ["bash", "-c", "cp -R /tmp/bro/* /usr/local/bro/etc/ && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
+        command: ["bash", "-c", "cp /tmp/bro/* /usr/local/bro/etc/ && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
         securityContext:
           runAsUser: 2001
           fsGroup: 2001
