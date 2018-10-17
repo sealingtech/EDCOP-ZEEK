@@ -35,7 +35,7 @@ RUN chmod +x /reset-network.sh
 RUN /usr/local/bro/bin/broctl deploy
 RUN groupadd -g 2001 bro && \
     useradd -u 2001 -g bro bro -d /usr/local/bro/logs/ && \
-    chown -R bro:bro /usr/local/bro/logs/ /usr/local/bro/lib/bro/plugins /usr/local/bro/share/bro/site
+    chown -R bro:bro /usr/local/bro/logs/ /usr/local/bro/lib/bro/plugins /usr/local/bro/share/bro/site /usr/local/bro/etc/ 
 #Needed to run as a non-privileged user
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/local/bro/bin/bro
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
