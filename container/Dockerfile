@@ -1,7 +1,7 @@
 FROM centos:latest AS build
 RUN yum -y install epel-release
 RUN yum -y update && \
-        yum -y install sudo supervisor git cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel python-devel swig zlib-devel GeoIP-devel libpcap gperftools vim-minimal wget kernel-headers kernel-devel kernel hiredis-devel git python-pip cmake librdkafka librdkafka-devel
+        yum -y install sudo supervisor git cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel python-devel swig zlib-devel GeoIP-devel libpcap gperftools vim-minimal wget kernel-headers kernel-devel kernel hiredis-devel git python-pip cmake librdkafka librdkafka-devel sendmail
 RUN pip install bro-pkg
 RUN     wget https://www.bro.org/downloads/bro-2.5.5.tar.gz && \
         tar xzf bro-2.5.5.tar.gz && \
@@ -23,7 +23,8 @@ FROM centos:latest
 RUN yum -y install epel-release
 RUN yum -y install supervisor git wget libpcap GeoIP gperftools tcpdump cmake librdkafka iproute sendmail && \
     yum -y clean all && \
-    mkdir -p /conf/{plugins,site} 
+    mkdir -p /conf/{plugins,site}
+	
 COPY --from=build /usr/local/bro/ /usr/local/bro
 
 ADD startbro.sh /startbro.sh
@@ -31,6 +32,8 @@ ADD reset-network.sh /reset-network.sh
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ENV PATH="/usr/local/bro/bin/:${PATH}"
+ENV INTERFACE=eth0
+
 RUN chmod +x /startbro.sh
 RUN chmod +x /reset-network.sh
 
@@ -43,8 +46,6 @@ RUN groupadd -g 2001 bro && \
 #Needed to run as a non-privileged user
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/local/bro/bin/bro
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
-
-ENV INTERFACE=eth0
 
 WORKDIR /usr/local/bro/logs/
 CMD ["/usr/bin/supervisord","-c","/etc/supervisor/conf.d/supervisord.conf"]
