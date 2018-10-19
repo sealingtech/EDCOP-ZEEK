@@ -34,14 +34,13 @@ images:
 
 Bro only uses 2 interfaces because it can only be deployed in passive mode. By default, these interfaces are named *calico* and *passive*. 
 
-useHostNetworking is used in situations where container networking is insufficient (such as the lack of SR-IOV).  This allows the container to see all physical interfaces of the minions.  This has some security concerns due to the fact that Bro now have access to all physical networking.  When useHostNetworking is set, specify hostNetworkingInterface to match the physical interface of the minions being deployed to.  When useHostNetworking is specified, the container will still be joined to the Calico network, but the passive variable is ignored.
+useHostNetworking is used in situations where container networking is insufficient (such as the lack of SR-IOV).  This allows the container to see all physical interfaces of the minions.  This has some security concerns due to the fact that Bro now have access to all physical networking.  When useHostNetworking is set, Bro will listen on the passive interface you identified in the [EDCOP-CONFIGURESENSORS](https://github.com/sealingtech/EDCOP-CONFIGURESENSORS) deployment.  When useHostNetworking is specified, the container will still be joined to the Calico network, but the passive variable is ignored.
 
 ```
 networks:
   overlay: calico
   passive: passive
   useHostNetworking: false
-  hostNetworkingInterface: eth0
 ```
  
 To find the names of your networks, use the following command:
