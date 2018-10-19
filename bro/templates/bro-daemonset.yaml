@@ -18,36 +18,55 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         networks: '[
-        {{ if .Values.networks.useHostNetworking }}
+        {{- if .Values.networks.useHostNetworking }}
         { "name": "{{ .Values.networks.overlay }}" }
-        {{ else }}
+        {{- else }}
         { "name": "{{ .Values.networks.overlay }}" },
         { "name": "{{ .Values.networks.passive }}" }
-        {{ end }}
+        {{- end }}
       ]'
     spec:
-      {{ if .Values.networks.useHostNetworking }}hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet{{ end }}
+      {{- if .Values.networks.useHostNetworking }}
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+      initContainers:
+      - name: verifynode
+        image: {{ .Values.images.runner }}
+        env:
+        - name: INTERFACE
+          valueFrom:
+            secretKeyRef:
+              name: passive-interface
+              key: interface
+        - name: STARTUP_SCRIPT
+          value: |
+            #!/bin/bash
+            set -e
+            sleep 10
+            if [ ! -f /sys/class/net/$INTERFACE/operstate ]; then
+            echo "Network interface '$INTERFACE' not found, exiting..."
+            exit 1
+            fi
       containers:
       - name: bro
         image: {{ .Values.images.bro }}
         imagePullPolicy: Always
-        env: 
-          {{ if .Values.networks.useHostNetworking }}
-          - name: INTERFACE
-            value: "{{ .Values.networks.hostNetworkingInterface }}"
-          {{ else }}
-          - name: INTERFACE
-            value: "net0"
-          {{ end }}
+        command: ["bash", "-c", "cp /tmp/bro/* /usr/local/bro/etc/ && /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"]
         securityContext:
+          runAsUser: 2001
+          fsGroup: 2001
           capabilities:
             add:
               - NET_ADMIN 
               - SYS_NICE #Used for CPU pinning
               - NET_RAW
-          runAsUser: 2001
-          fsGroup: 2001
+        env: 
+        - name: INTERFACE
+          valueFrom:
+            secretKeyRef:
+              name: passive-interface
+              key: interface
         resources:
           requests:
             cpu: "{{ .Values.broConfig.requests.cpu }}"
@@ -58,7 +77,7 @@ spec:
         volumeMounts:
         - mountPath: /usr/local/bro/logs/
           name: bro-logs 
-        - mountPath: /usr/local/bro/etc/
+        - mountPath: /tmp/bro/
           name: bro-etc-config 
         - mountPath: /usr/local/bro/share/bro/site/local.bro
           name: bro-site-config 
@@ -102,8 +121,6 @@ spec:
       - name: filebeat
         image: {{ .Values.images.filebeat }}
         imagePullPolicy: Always
-        securityContext:
-          privileged: true
         volumeMounts:
         - mountPath: /bro/
           name: bro-spool
@@ -135,6 +152,5 @@ spec:
           name: logstash-{{ template "bro.fullname" . }}-pipeline
           
       restartPolicy: Always
-      dnsPolicy: ClusterFirst
       nodeSelector:
         {{ .Values.nodeSelector.label }} : "true"
