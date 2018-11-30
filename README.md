@@ -25,9 +25,9 @@ This is the location of where the containers will be pulled from when deployed. 
 ```
 images:
   bro: gcr.io/edcop-public/bro:2
-  logstash: docker.elastic.co/logstash/logstash:6.3.0
+  logstash: docker.elastic.co/logstash/logstash:6.5.1
   redis: redis:4.0.9
-  filebeat: docker.elastic.co/beats/filebeat:6.3.0
+  filebeat: docker.elastic.co/beats/filebeat:6.5.1
 ```
  
 ## Networks
