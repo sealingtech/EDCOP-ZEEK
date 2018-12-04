@@ -1,16 +1,16 @@
 # EDCOP Bro Chart values
 images:
   bro: gcr.io/edcop-dev/mike-bro:5
-  logstash: docker.elastic.co/logstash/logstash:6.5.1
+  logstash: docker.elastic.co/logstash/logstash:6.4.3
   redis: redis:4.0.9
-  filebeat: docker.elastic.co/beats/filebeat:6.5.1
+  filebeat: docker.elastic.co/beats/filebeat:6.4.3
   runner: gcr.io/edcop-public/runner:8
 networks:
   # Overlay is the name of the default cni network
   overlay: calico
   # Passive is the name of the sriov interface
-  passive: passive 
-  useHostNetworking: false  
+  passive: passive
+  useHostNetworking: false
 nodeSelector:
   label: sensor
 broConfig:
@@ -21,7 +21,7 @@ broConfig:
   limits:
     cpu: 2
     memory: 4G
-  # CPU pinning depends on your NUMA node configuration. 
+  # CPU pinning depends on your NUMA node configuration.
   # Separate cores by commas in ascending order without spaces.
   #Select whether you want to pin CPUs or not.  If you choose to false, then the pinCpus and lbProcs will be ignored
   setCpuAffinity: false
@@ -31,13 +31,13 @@ broConfig:
   #List out all the packages you would like to install from here https://github.com/bro/packages.  These packages will be installed before each instance of Bro is deployed
   #NOTE: Currently requires access to the Internet
 logstashConfig:
-  threads: 2 
+  threads: 2
   batchCount: 250
   initialJvmHeap: 1g
-  maxJvmHeap: 1g 
+  maxJvmHeap: 1g
   pipelineWorkers: 2
-  pipelineOutputWorkers: 2 
-  pipelineBatchSize: 150  
+  pipelineOutputWorkers: 2
+  pipelineBatchSize: 150
   requests:
     cpu: 100m
     memory: 64Mi
