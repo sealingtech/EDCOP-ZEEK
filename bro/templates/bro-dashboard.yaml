@@ -5,7 +5,7 @@ metadata:
 data:
   bro-conn.json: |
     {
-      "version": "6.5.1",
+      "version": "6.4.2",
       "objects": [
         {
           "id": "77f69ce0-20aa-11e8-a082-0f8cf225e57b",
