@@ -5,7 +5,7 @@ metadata:
 data:
   bro-conn.json: |
     {
-      "version": "6.3.0",
+      "version": "6.4.2",
       "objects": [
         {
           "id": "77f69ce0-20aa-11e8-a082-0f8cf225e57b",
@@ -18,7 +18,7 @@ data:
             "description": "",
             "version": 1,
             "kibanaSavedObjectMeta": {
-              "searchSourceJSON": "{\"index\":\"bro\",\"query\":{\"query\":{\"match_all\":{}},\"language\":\"lucene\"},\"filter\":[]}"        
+              "searchSourceJSON": "{\"index\":\"bro\",\"query\":{\"query\":{\"match_all\":{}},\"language\":\"lucene\"},\"filter\":[]}"
             }
           }
         },
