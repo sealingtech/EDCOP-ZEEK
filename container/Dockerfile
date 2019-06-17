@@ -12,7 +12,7 @@ RUN     wget https://www.bro.org/downloads/bro-2.5.5.tar.gz && \
 
 #here is where you can add all your packages.  Note that some packages require different build tools and therefore may require additional packages not otherwise found.  Some packages require configuration as well.  If this is the case it is best to modify the configurations maps accordingly.
 RUN PATH="${PATH}:/usr/local/bro/bin/"; bro-pkg autoconfig && \
-    bro-pkg install --force bro/j-gras/bro-af_packet-plugin
+    bro-pkg install --force bro-af_packet-plugin
     #bro-pkg install --force bro/sethhall/unknown-mime-type-discovery && \
     #bro-pkg install --force bro/apache/metron-bro-plugin-kafka
 
