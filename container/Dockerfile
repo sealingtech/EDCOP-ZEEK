@@ -1,11 +1,12 @@
 FROM centos:latest AS build
-RUN yum -y install epel-release
+RUN yum -y install epel-release dnf-plugins-core
 RUN yum -y update && \
-        yum -y install sudo supervisor git cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel python-devel swig zlib-devel GeoIP-devel libpcap gperftools vim-minimal wget kernel-headers kernel-devel kernel hiredis-devel git python-pip cmake librdkafka librdkafka-devel sendmail
-RUN pip install bro-pkg
-RUN     wget https://www.bro.org/downloads/bro-2.5.5.tar.gz && \
-        tar xzf bro-2.5.5.tar.gz && \
-        cd bro-2.5.5 && \
+        yum config-manager --set-enabled PowerTools && \
+        yum -y install sudo supervisor git cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel python2-devel swig zlib-devel GeoIP-devel libpcap gperftools vim-minimal wget kernel-headers kernel-devel kernel hiredis-devel git python2-pip cmake librdkafka librdkafka-devel sendmail
+RUN python2 -m pip install bro-pkg
+RUN     wget https://download.zeek.org/zeek-3.1.3.tar.gz && \
+        tar xzf zeek-3.1.3.tar.gz && \
+        cd zeek-3.1.3 && \
         #split the configure and make \
         ./configure && \
         make install 
