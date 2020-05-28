@@ -3,7 +3,7 @@ RUN yum -y install epel-release dnf-plugins-core
 RUN yum -y update && \
         yum config-manager --set-enabled PowerTools && \
         yum -y install sudo supervisor git cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel python2-devel swig zlib-devel GeoIP-devel libpcap gperftools vim-minimal wget kernel-headers kernel-devel kernel hiredis-devel git python2-pip cmake librdkafka librdkafka-devel sendmail
-RUN python2 -m pip install bro-pkg
+RUN python2 -m pip install zkg
 RUN     wget https://download.zeek.org/zeek-3.1.3.tar.gz && \
         tar xzf zeek-3.1.3.tar.gz && \
         cd zeek-3.1.3 && \
@@ -12,13 +12,13 @@ RUN     wget https://download.zeek.org/zeek-3.1.3.tar.gz && \
         make install 
 
 #here is where you can add all your packages.  Note that some packages require different build tools and therefore may require additional packages not otherwise found.  Some packages require configuration as well.  If this is the case it is best to modify the configurations maps accordingly.
-RUN PATH="${PATH}:/usr/local/bro/bin/"; bro-pkg autoconfig && \
-    bro-pkg install --force bro-af_packet-plugin
-    #bro-pkg install --force bro/sethhall/unknown-mime-type-discovery && \
-    #bro-pkg install --force bro/apache/metron-bro-plugin-kafka
+RUN PATH="${PATH}:/usr/local/zeek/bin/"; zkg autoconfig && \
+    zkg install --force zeek-af_packet-plugin
+    #zkg install --force zeek/sethhall/unknown-mime-type-discovery && \
+    #zkg install --force zeek/apache/metron-bro-plugin-kafka
 
 RUN echo "********Log files for Bro Packages*********" && \
-    if [ -d /root/.bro-pkg/logs/ ];then for i in $(find /root/.bro-pkg/logs/); do echo "***Bro Log file: $i"; cat $i; done;fi
+    if [ -d /root/.zkg/logs/ ];then for i in $(find /root/.zkg/logs/); do echo "***Zeek Log file: $i"; cat $i; done;fi
 
 FROM centos:latest
 RUN yum -y install epel-release
@@ -26,7 +26,7 @@ RUN yum -y install supervisor git wget libpcap GeoIP gperftools tcpdump cmake li
     yum -y clean all && \
     mkdir -p /conf/{plugins,site}
 	
-COPY --from=build /usr/local/bro/ /usr/local/bro
+COPY --from=build /usr/local/zeek/ /usr/local/zeek
 
 ADD startbro.sh /startbro.sh
 ADD reset-network.sh /reset-network.sh
