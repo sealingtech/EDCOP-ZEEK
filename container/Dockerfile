@@ -1,12 +1,16 @@
+
 FROM centos:latest AS build
+
+#Version Number of Zeek
+ENV VERSION="3.1.3"
 RUN yum -y install epel-release dnf-plugins-core
 RUN yum -y update && \
         yum config-manager --set-enabled PowerTools && \
         yum -y install sudo supervisor git cmake make gcc gcc-c++ flex bison libpcap-devel openssl-devel python2-devel swig zlib-devel GeoIP-devel libpcap gperftools vim-minimal wget kernel-headers kernel-devel kernel hiredis-devel git python2-pip cmake librdkafka librdkafka-devel sendmail
 RUN python2 -m pip install zkg
-RUN     wget https://download.zeek.org/zeek-3.1.3.tar.gz && \
-        tar xzf zeek-3.1.3.tar.gz && \
-        cd zeek-3.1.3 && \
+RUN     wget https://download.zeek.org/zeek-$VERSION.tar.gz && \
+        tar xzf zeek-$VERSION.tar.gz && \
+        cd zeek-$VERSION && \
         #split the configure and make \
         ./configure && \
         make install 
