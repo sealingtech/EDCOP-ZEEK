@@ -42,10 +42,11 @@ ENV INTERFACE=eth0
 
 RUN chmod +x /startbro.sh
 RUN chmod +x /reset-network.sh
+RUN /usr/local/zeek/bin/zeekctl deploy
 RUN sed -i "s/eth0/${INTERFACE}/g" /usr/local/zeek/etc/node.cfg
 RUN groupadd -g 2001 zeek && \
     useradd -u 2001 -g zeek zeek -d /usr/local/zeek/logs/ && \
-    chown -R zeek:zeek /usr/local/zeek/logs/ /usr/local/zeek/lib/zeek/plugins /usr/local/zeek/share/zeek/site /usr/local/zeek/etc/ 
+    chown -R zeek:zeek /usr/local/zeek/logs/ /usr/local/zeek/lib/zeek/plugins /usr/local/zeek/share/zeek/site /usr/local/zeek/etc/ /usr/local/zeek/share/zeekctl/scripts/zeekctl-config.sh
 
 #Needed to run as a non-privileged user
 RUN setcap cap_net_raw,cap_net_admin=eip /usr/local/zeek/bin/zeek
